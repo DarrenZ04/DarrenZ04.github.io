@@ -10,6 +10,12 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 </head>
 <body>
+    <!-- Loading Bar -->
+    <div class="loading-bar" id="loadingBar">
+        <div class="loading-progress" id="loadingProgress"></div>
+        <div class="loading-percentage" id="loadingPercentage">0%</div>
+    </div>
+
     <!-- Navigation -->
     <nav class="navbar">
         <div class="nav-container">
@@ -43,7 +49,6 @@
     <!-- About Section -->
     <section id="about" class="section">
         <div class="container">
-            <h2 class="section-title">About Me</h2>
             <div class="about-content">
                 <div class="about-image-container">
                     <img src="images/headshot.jpg" alt="Darren Zeng" class="profile-image" id="profileImage">
@@ -52,6 +57,7 @@
                     </div>
                 </div>
                 <div class="about-text">
+                    <h2 class="about-title">About Me</h2>
                     <p>
                         I'm an undergraduate at UC Berkeley studying Electrical Engineering & Computer Science with a Data Science minor. 
                         I love building end-to-end systems that turn data into decisions—whether that's fantasy basketball draft tools, 

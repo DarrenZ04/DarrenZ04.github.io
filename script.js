@@ -1,3 +1,139 @@
+// Loading Bar Animation
+const loadingBar = document.getElementById('loadingBar');
+const loadingProgress = document.getElementById('loadingProgress');
+
+function simulateLoading() {
+    let progress = 0;
+    const interval = setInterval(() => {
+        progress += Math.random() * 15;
+        if (progress >= 100) {
+            progress = 100;
+            clearInterval(interval);
+            setTimeout(() => {
+                loadingProgress.style.width = '100%';
+                setTimeout(() => {
+                    loadingBar.classList.add('hidden');
+                    // Start page animations after loading
+                    initPageAnimations();
+                }, 300);
+            }, 100);
+        } else {
+            loadingProgress.style.width = progress + '%';
+        }
+    }, 100);
+}
+
+// Initialize loading on page load
+if (document.readyState === 'complete') {
+    simulateLoading();
+} else {
+    window.addEventListener('load', () => {
+        simulateLoading();
+    });
+}
+
+// Fallback: if page loads very quickly, still show loading animation briefly
+document.addEventListener('DOMContentLoaded', () => {
+    // Ensure minimum loading time for smooth transition
+    setTimeout(() => {
+        if (loadingProgress.style.width === '0%' || !loadingProgress.style.width) {
+            simulateLoading();
+        }
+    }, 100);
+});
+
+// Initialize page animations
+function initPageAnimations() {
+    // Animate navbar
+    const navbar = document.querySelector('.navbar');
+    if (navbar) {
+        setTimeout(() => {
+            navbar.classList.add('loaded');
+        }, 100);
+    }
+
+    // Animate hero content
+    const heroContent = document.querySelector('.hero-content');
+    if (heroContent) {
+        setTimeout(() => {
+            heroContent.classList.add('animate');
+        }, 300);
+    }
+
+    // Animate sections on scroll
+    const sections = document.querySelectorAll('.section');
+    const sectionObserver = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('animate');
+                
+                // Animate about image container
+                if (entry.target.id === 'about') {
+                    const aboutImageContainer = document.querySelector('.about-image-container');
+                    if (aboutImageContainer) {
+                        setTimeout(() => {
+                            aboutImageContainer.classList.add('animate');
+                        }, 200);
+                    }
+                }
+            }
+        });
+    }, {
+        threshold: 0.1,
+        rootMargin: '0px 0px -100px 0px'
+    });
+
+    sections.forEach(section => {
+        sectionObserver.observe(section);
+    });
+
+    // Animate cards with stagger effect
+    animateCards();
+}
+
+// Animate cards with stagger
+function animateCards() {
+    const projectCards = document.querySelectorAll('.project-card');
+    const courseworkCards = document.querySelectorAll('.coursework-card');
+    
+    const cardObserver = new IntersectionObserver((entries) => {
+        entries.forEach((entry, index) => {
+            if (entry.isIntersecting) {
+                setTimeout(() => {
+                    entry.target.classList.add('animate');
+                }, index * 100);
+            }
+        });
+    }, {
+        threshold: 0.1,
+        rootMargin: '0px 0px -50px 0px'
+    });
+
+    [...projectCards, ...courseworkCards].forEach(card => {
+        cardObserver.observe(card);
+    });
+
+    // Animate social links
+    const socialLinks = document.querySelectorAll('.social-link');
+    const contactSection = document.querySelector('#contact');
+    if (contactSection) {
+        const socialObserver = new IntersectionObserver((entries) => {
+            entries.forEach((entry) => {
+                if (entry.isIntersecting) {
+                    socialLinks.forEach((link, index) => {
+                        setTimeout(() => {
+                            link.classList.add('animate');
+                        }, index * 150);
+                    });
+                }
+            });
+        }, {
+            threshold: 0.2
+        });
+        socialObserver.observe(contactSection);
+    }
+}
+
 // Mobile Navigation Toggle
 const hamburger = document.querySelector('.hamburger');
 const navMenu = document.querySelector('.nav-menu');
@@ -61,28 +197,7 @@ document.querySelectorAll('a[href^="#"]').forEach(anchor => {
     });
 });
 
-// Intersection Observer for fade-in animations
-const observerOptions = {
-    threshold: 0.1,
-    rootMargin: '0px 0px -50px 0px'
-};
-
-const observer = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-        if (entry.isIntersecting) {
-            entry.target.style.opacity = '1';
-            entry.target.style.transform = 'translateY(0)';
-        }
-    });
-}, observerOptions);
-
-// Observe project and coursework cards
-document.querySelectorAll('.project-card, .coursework-card').forEach(card => {
-    card.style.opacity = '0';
-    card.style.transform = 'translateY(20px)';
-    card.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
-    observer.observe(card);
-});
+// Cards are now animated by the animateCards() function
 
 // Add active state to navigation links based on scroll position
 const sections = document.querySelectorAll('.section, .hero');
